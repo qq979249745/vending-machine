@@ -12,8 +12,8 @@ import java.util.List;
  * @Version 1.0
  */
 public interface OrderService {
-    Order getOrderById(Integer id);
+    Order getOrderByPayNo(String payNo);
     List<Order> getAllOrder();
-    boolean deleteOrderById(Integer id);
-    boolean updateOrderById(Order order);
+    boolean insertOrder(Order order);
+    boolean updateOrder(Order order);
 }

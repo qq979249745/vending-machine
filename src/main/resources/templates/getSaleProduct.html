@@ -6,24 +6,24 @@
 <!-- Page Wrapper -->
 <div id="page-top" class="container">
 
-    <h3>请选择离你最近的售货机</h3>
+    <h3>请选择要购买的商品</h3>
 
     <div class="row">
-        <div th:each="buyMachine:${buyMachineList}" class="col-md-4 col-sm-4 mt-3" >
+        <div th:each="saleProduct:${saleProductList}" class="col-md-4 col-sm-4 mt-3" >
             <div class="panel panel-info">
-                <div class="panel-heading" th:text="${buyMachine.getLocation()}">
+                <div class="panel-heading" th:text="${saleProduct.getProduct().getName()}" style="height: 27px;overflow-y: hidden">
                     Info Panel
                 </div>
                 <div class="panel-body text-center">
-                    <img  th:src="${'/image/'+buyMachine.getVendingMachine().getImgPath()}" class="img-responsive" style="height: 300px">
+                    <img  th:src="${'/image/'+saleProduct.getProduct().getImgPath()}" class="img-responsive" style="height: 300px">
+                    <p style="color:red;" th:text="'￥'+${saleProduct.getProduct().getPrice()}+'元'"></p>
                 </div>
                 <div class="panel-footer">
-                    <a th:href="'/getSaleProduct/'+${buyMachine.getId()}" type="button"  class="btn btn-info btn-mini col-md-12 py-1 m-1" >进入</a>
+                    <a th:href="'/buyProduct/'+${saleProduct.getId()}" type="button"  class="btn btn-danger btn-mini col-md-12 py-1 m-1" >购买</a>
                 </div>
             </div>
         </div>
     </div>
-
     <div th:replace="fragment/footer::footer"></div>
 
 </div>

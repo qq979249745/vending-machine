@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/head::head(首页)"><title></title></head>
+<body>
+
+<!-- Page Wrapper -->
+<div id="page-top" class="container">
+
+    <h3>订单详情</h3>
+
+    <div class="row">
+        <div  class="col-md-12 mt-3" >
+            <div class="card">
+                <div class="card-title">
+                    <h4 >支付成功，请取走你的物品。</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <th scope="row">购买的商品：</th>
+                                <td th:text="${order.getSaleProduct().getProduct().getName()}">汽水</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">商品详情：</th>
+                                <td><img  th:src="${'/image/'+order.getSaleProduct().getProduct().getImgPath()}" class="img-responsive" style="height: 300px"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">支付的价格：</th>
+                                <td th:text="${'￥'+order.getPrice()+'元'}">$21.56</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">订单号：</th>
+                                <td th:text="${order.getPayNo()}">12324214421421</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">订单状态：</th>
+                                <td th:text="${order.getStatus()}">12324214421421</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a href="/">返回首页</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragment/footer::footer"></div>
+
+</div>
+
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<div th:replace="fragment/commonJS::commonJS"></div>
+<script type="text/javascript">
+    function updateState(id,state) {
+        $.ajax({
+            type : 'POST',
+            url : '/back/operation/updateMachine',
+            data :{
+                id:id,
+                state:state
+            },
+            success : function(result) {
+                if (100===result.code){
+                    toast('修改成功','success');
+                    setInterval(function () {
+                        top.location=result.extend.data;
+                    },1000);
+                }else {
+                    toast(result.extend.data,'danger');
+                }
+            }
+        })
+    }
+    function toast(message,type) {
+        bootoast({
+            message: message,
+            type: type,
+            position: 'top-center',
+            icon: type,
+            timeout: 2,
+            animationDuration: 300,
+            dismissible: true
+        });
+    }
+</script>
+</body>
+</html>

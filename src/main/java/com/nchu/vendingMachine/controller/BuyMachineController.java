@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -53,9 +50,16 @@ public class BuyMachineController {
             return RestResponse.fail().add("data",result.getAllErrors().get(0).getDefaultMessage());
         }else {
             buyMachine.setState("待运输");
-            return buyMachineService.insertBuyMachine(buyMachine)?RestResponse.success().add("data","/back/business/machineManager")
+            return buyMachineService.insertBuyMachine(buyMachine)?RestResponse.success().add("data","/back/business/showMachine")
                     :RestResponse.fail().add("data","购买失败");
         }
+    }
+
+    @GetMapping("/back/business/showMachine")
+    public String showManager(Model model){
+        List<BuyMachine> buyMachines = buyMachineService.getAllBuyMachine();
+        model.addAttribute(buyMachines);
+        return "back/business/showMachine";
     }
 
     @RequestMapping("/back/factory/saleManager")
@@ -71,6 +75,15 @@ public class BuyMachineController {
         buyMachine.setId(id);
         buyMachine.setState(state);
         return buyMachineService.updateState(buyMachine)?RestResponse.success().add("data","/back/factory/saleManager")
+                :RestResponse.fail().add("data","修改失败");
+    }
+    @PostMapping("/back/operation/updateMachine")
+    @ResponseBody
+    public RestResponse updateMachine(Integer id,String state){
+        BuyMachine buyMachine = new BuyMachine();
+        buyMachine.setId(id);
+        buyMachine.setState(state);
+        return buyMachineService.updateState(buyMachine)?RestResponse.success().add("data","/back/operation")
                 :RestResponse.fail().add("data","修改失败");
     }
 }

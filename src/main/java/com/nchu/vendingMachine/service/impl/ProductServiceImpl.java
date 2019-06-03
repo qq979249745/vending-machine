@@ -1,8 +1,8 @@
 package com.nchu.vendingMachine.service.impl;
 
-import com.nchu.vendingMachine.dao.VendingMachineMapper;
-import com.nchu.vendingMachine.entity.VendingMachine;
-import com.nchu.vendingMachine.service.VendingMachineService;
+import com.nchu.vendingMachine.dao.ProductMapper;
+import com.nchu.vendingMachine.entity.Product;
+import com.nchu.vendingMachine.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,32 +14,32 @@ import java.util.UUID;
 
 /**
  * 162015班 第13组
- * 智能售货机后台管理系统——售货机模块
+ * 智能售货机后台管理系统——登录模块
  *
  * @Author: 16201533朱天保
- * @Date: 2019/6/25 14:45
+ * @Date: 2019/6/27 19:13
  * @Version 1.0
  */
 @Service
-public class VendingMachineImpl implements VendingMachineService {
+public class ProductServiceImpl implements ProductService {
     @Value("${web.upload-path}")
     private String path;
     @Autowired
-    private VendingMachineMapper vendingMachineMapper;
+    private ProductMapper productMapper;
 
     @Override
-    public boolean addVendingMachine(VendingMachine vendingMachine, MultipartFile file) {
+    public boolean addProduct(Product product, MultipartFile file) {
         try{
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
             String originalFilename = file.getOriginalFilename();
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
             String fileName=uuid+originalFilename.substring(originalFilename.lastIndexOf("."));
-            vendingMachine.setImgPath(fileName);
             File f=new File(path+fileName);
+            product.setImgPath(fileName);
             if (!f.getParentFile().exists()){
                 f.getParentFile().mkdirs();
             }
             file.transferTo(f);
-           return vendingMachineMapper.insertSelective(vendingMachine)>0;
+            return productMapper.insertSelective(product)>0;
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -47,32 +47,34 @@ public class VendingMachineImpl implements VendingMachineService {
     }
 
     @Override
-    public VendingMachine getVendingMachineById(Integer id) {
-        return vendingMachineMapper.selectByPrimaryKey(id);
+    public Product getProductById(Integer id) {
+        return productMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public List<VendingMachine> getAllVendingMachine() {
-        return vendingMachineMapper.selectByExample(null);
+    public List<Product> getAllProduct() {
+        return productMapper.selectByExample(null);
+    }
+
+
+
+    @Override
+    public boolean updateProductById(Product order) {
+        return productMapper.updateByPrimaryKeySelective(order) > 0;
     }
 
     @Override
-    public boolean deleteVendingMachineById(Integer id) {
-        return false;
-    }
-
-    @Override
-    public boolean updateVendingMachineById(VendingMachine vendingMachine, MultipartFile file) {
+    public boolean updateProductById(Product product, MultipartFile file) {
         try{
-            if (file.getSize()>0){
-                String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            if(file.getSize()>0){
                 String originalFilename = file.getOriginalFilename();
+                String uuid = UUID.randomUUID().toString().replaceAll("-", "");
                 String fileName=uuid+originalFilename.substring(originalFilename.lastIndexOf("."));
-                vendingMachine.setImgPath(fileName);
+                product.setImgPath(fileName);
                 File f=new File(path+fileName);
                 file.transferTo(f);
             }
-            return vendingMachineMapper.updateByPrimaryKeySelective(vendingMachine)>0;
+            return productMapper.updateByPrimaryKeySelective(product)>0;
         }catch (Exception e){
             e.printStackTrace();
             return false;

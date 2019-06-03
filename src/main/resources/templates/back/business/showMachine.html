@@ -6,37 +6,7 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
 
-    <!-- Sidebar -->
-    <ul th:fragment="operationSidebar" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-      <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/back/operation">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">运维人员</div>
-      </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
-
-      <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
-        <a class="nav-link" href="/back/operation">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>主页</span>
-		</a>
-      </li>
-
-
-      <hr class="sidebar-divider d-none d-md-block">
-
-      <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
-
-    </ul>
-    <!-- End of Sidebar -->
+    <ul th:replace="back/business/index::businessSidebar"></ul>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -47,7 +17,7 @@
         <nav th:replace="back/business/index::businessTopBar"></nav>
 
         <div class="container-fluid">
-          <h1 class="h3 mb-2 text-gray-800">售货机状态</h1>
+          <h1 class="h3 mb-2 text-gray-800">售货机管理</h1>
           <p class="mb-4">售货机的位置和状态.</p>
           <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -62,7 +32,6 @@
                     <th>安装位置</th>
                     <th>售货机状态</th>
                     <th>价格</th>
-                    <th>操作</th>
                   </tr>
                   </thead>
                   <tfoot>
@@ -71,7 +40,6 @@
                     <th>安装位置</th>
                     <th>售货机状态</th>
                     <th>价格</th>
-                    <th>操作</th>
                   </tr>
                   </tfoot>
                   <tbody>
@@ -80,32 +48,6 @@
                     <td th:text="${buyMachine.getLocation()}">学生公寓20栋</td>
                     <td th:text="${buyMachine.getState()}">经营</td>
                     <td th:text="${'￥'+buyMachine.getVendingMachine().getPrice()}+'元'">61</td>
-                    <td>
-                       <span th:if="${buyMachine.getState().equals('经营中')||buyMachine.getState().equals('维修中')}">
-                          <button th:onclick="'updateState('+${buyMachine.getId()}+',\'已下线\')'" href="#" class="btn btn-info btn-icon-split">
-                                <span class="icon text-white-50">
-                                <i class="fas fa-info-circle"></i>
-                                </span>
-                            <span class="text">下线</span>
-                          </button>
-                       </span>
-                      <span th:if="${buyMachine.getState().equals('经营中')}">
-                        <button th:onclick="'updateState('+${buyMachine.getId()}+',\'维修中\')'" href="#" class="btn btn-danger btn-icon-split">
-                              <span class="icon text-white-50">
-                              <i class="fas fa-trash"></i>
-                              </span>
-                          <span class="text">申请维修</span>
-                        </button>
-                      </span>
-                      <span th:if="${buyMachine.getState().equals('经营中')}">
-                        <a th:href="'/back/operation/saleProduct/'+${buyMachine.getId()}"  class="btn btn-primary btn-icon-split">
-                              <span class="icon text-white-50">
-                              <i class="fas fa-calendar"></i>
-                              </span>
-                          <span class="text">补货</span>
-                        </a>
-                      </span>
-                    </td>
                   </tr>
                   </tbody>
                 </table>

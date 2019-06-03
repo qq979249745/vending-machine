@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/head::head(智能售货机后台管理系统)"><title></title></head>
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="back/operation/index::operationSidebar"></ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <nav th:replace="back/business/index::businessTopBar"></nav>
+
+        <div class="container-fluid">
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">商品列表</h1>
+          </div>
+          <div class="container">
+            <div class="row">
+              <div th:each="product:${productList}" class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                <div class="thumbnail" >
+                  <img  th:src="${'/image/'+product.getImgPath()}" class="img-responsive" style="width: 200px;height:200px">
+                  <div>
+                    <h4 class="text-center" style="height: 30px;overflow-y:hidden" th:text="${product.getName()}"></h4>
+                    <p style="color:red;" th:text="'￥'+${product.getPrice()}+'元'"></p>
+                  </div>
+                  <form th:id="${product.getId()}">
+                    <input th:value="${product.getId()}" name="productId" hidden="hidden">
+                    <input th:value="${product.getInventory()}" name="product.inventory" hidden="hidden">
+                    <input name="saleNum" id="productCounts" type="number" class="form-control form-control-user"  th:value="${product.getInventory()}">
+                    <button type="button" th:onclick="'addProduct('+${product.getId()}+')'" class="btn btn-danger btn-lg col-md-12 py-1 m-1" >补货</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <div th:replace="fragment/footer::footer"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <div th:replace="fragment/logoutModal::logout"></div>
+  <div th:replace="fragment/commonJS::commonJS"></div>
+<script>
+  function addProduct(id) {
+      var data=$('#'+id).serialize();
+      $.ajax({
+        type : 'POST',
+        data :data,
+        success : function(result) {
+          if (200===result.code){
+            toast(result.extend.data,'danger');
+          }else {
+            top.location=result.extend.data;
+          }
+        }
+      });
+  }
+  function toast(message,type) {
+    bootoast({
+      message: message,
+      type: type,
+      position: 'top-center',
+      icon: type,
+      timeout: 2,
+      animationDuration: 300,
+      dismissible: true
+    });
+  }
+</script>
+</body>
+</html>

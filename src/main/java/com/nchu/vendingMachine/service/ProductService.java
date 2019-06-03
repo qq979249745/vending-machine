@@ -1,6 +1,7 @@
 package com.nchu.vendingMachine.service;
 
 import com.nchu.vendingMachine.entity.Product;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,8 +13,11 @@ import java.util.List;
  * @Version 1.0
  */
 public interface ProductService {
+    boolean addProduct(Product product, MultipartFile file);
+
     Product getProductById(Integer id);
     List<Product> getAllProduct();
-    boolean deleteProductById(Integer id);
     boolean updateProductById(Product order);
+
+    boolean updateProductById(Product product, MultipartFile file);
 }

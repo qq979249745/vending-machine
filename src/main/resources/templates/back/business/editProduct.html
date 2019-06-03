@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/head::head(智能售货机后台管理系统)"><title></title></head>
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="back/business/index::businessSidebar"></ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <nav th:replace="back/business/index::businessTopBar"></nav>
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800">商品修改</h1>
+        </div>
+
+      <!-- 开始 -->
+      <form id="myForm"  enctype="multipart/form-data"  method="post">
+        <input hidden="hidden" name="id" th:value="${product.getId()}">
+        <div class="form-group">
+          <label class="col-sm-2"><span class="text-danger">*</span>商品名称：</label>
+          <input class="form-control" name="name" required th:value="${product.getName()}">
+        </div>
+        <div class="form-group">
+          <label class="col-sm-5"><span class="text-danger">*</span>商品价格：</label>
+          <input type="number" class="form-control" name="price" required th:value="${product.getPrice()}">
+        </div>
+        <div class="form-group">
+          <label class="col-sm-5"><span class="text-danger">*</span>采购量：</label>
+          <input type="number" class="form-control" name="inventory" required th:value="${product.getInventory()}">
+        </div>
+        <div class="form-group">
+          <div>
+            <img id="img" style="height: 300px;width: 300px" th:src="'/image/'+${product.getImgPath()}">
+          </div>
+          <div><span class="text-danger">*</span>选择图片：</div>
+          <div class="custom-file">
+            <label id="fileName" class="custom-file-label" for="file" th:text="${product.getImgPath()}"></label>
+            <input onchange="imgChange()" id="file" name="file" type="file" accept="image/*"  class="custom-file-input"  required>
+          </div>
+        </div>
+        <div class="form-group">
+          <button onclick="save()"  type="button" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+      <!-- 结束 -->
+      </div>
+      <!-- Footer -->
+      <div th:replace="fragment/footer::footer"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <div th:replace="fragment/logoutModal::logout"></div>
+  <div th:replace="fragment/commonJS::commonJS"></div>
+  <script>
+    function imgChange(){
+      var file=$('#file')[0].files[0];
+      if (file==null)return;
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload=function (ev) {
+        $('#fileName').text(file.name);
+        $('#img').attr('src',this.result);
+      };
+    }
+    function save(){
+      var data=new FormData($("#myForm")[0]);
+      $.ajax({
+        url:'/back/business/editProduct',
+        data:data,
+        type:'post',
+        processData: false,
+        contentType: false,
+        success:function (result) {
+          console.log(result);
+          if (200===result.code){
+            toast(result.extend.data,'danger');
+          }else {
+            toast('保存成功','success');
+            setInterval(function () {
+              top.location=result.extend.data;
+            },1000);
+          }
+        }
+      });
+    }
+    function toast(message,type) {
+      bootoast({
+        message: message,
+        type: type,
+        position: 'top-center',
+        icon: type,
+        timeout: 2,
+        animationDuration: 300,
+        dismissible: true
+      });
+    }
+  </script>
+</body>
+</html>

@@ -35,7 +35,6 @@ public class BuyMachineServiceImpl implements BuyMachineService {
         buyMachineExample.setOrderByClause(" id desc");
         List<BuyMachine> buyMachines = buyMachineMapper.selectByExample(buyMachineExample);
         for (BuyMachine buyMachine : buyMachines) {
-            System.out.println(buyMachine.getId());
             buyMachine.setVendingMachine(vendingMachineService.getVendingMachineById(buyMachine.getVmId()));
         }
         return buyMachines;
@@ -44,5 +43,24 @@ public class BuyMachineServiceImpl implements BuyMachineService {
     @Override
     public boolean updateState(BuyMachine buyMachine) {
         return buyMachineMapper.updateByPrimaryKeySelective(buyMachine) > 0;
+    }
+
+    @Override
+    public BuyMachine getBuyMachineById(Integer id) {
+        BuyMachine buyMachine = buyMachineMapper.selectByPrimaryKey(id);
+        buyMachine.setVendingMachine(vendingMachineService.getVendingMachineById(buyMachine.getVmId()));
+        return buyMachine;
+    }
+
+    @Override
+    public List<BuyMachine> getAllBuyMachineByOnline() {
+        BuyMachineExample buyMachineExample = new BuyMachineExample();
+        buyMachineExample.setOrderByClause(" id desc");
+        buyMachineExample.createCriteria().andStateEqualTo("经营中");
+        List<BuyMachine> buyMachines = buyMachineMapper.selectByExample(buyMachineExample);
+        for (BuyMachine buyMachine : buyMachines) {
+            buyMachine.setVendingMachine(vendingMachineService.getVendingMachineById(buyMachine.getVmId()));
+        }
+        return buyMachines;
     }
 }

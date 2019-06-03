@@ -16,4 +16,6 @@ public interface BuyMachineService {
     boolean insertBuyMachine(BuyMachine buyMachine);
     List<BuyMachine> getAllBuyMachine();
     boolean updateState(BuyMachine buyMachine);
+    BuyMachine getBuyMachineById(Integer id);
+    List<BuyMachine> getAllBuyMachineByOnline();
 }
