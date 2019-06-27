@@ -6,7 +6,7 @@ import com.nchu.vendingMachine.entity.UserExample;
 import com.nchu.vendingMachine.service.LoginService;
 import com.nchu.vendingMachine.util.EncryptBasedDes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * @Date: 2019/6/17 21:20
  * @Version 1.0
  */
-@Component
+@Service
 public class LoginServiceImpl implements LoginService {
     @Autowired
     private UserMapper userMapper;

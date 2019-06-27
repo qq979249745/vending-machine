@@ -1,8 +1,12 @@
 package com.nchu.vendingMachine.controller;
 
+import com.nchu.vendingMachine.entity.BuyMachine;
 import com.nchu.vendingMachine.entity.RestResponse;
 import com.nchu.vendingMachine.entity.User;
+import com.nchu.vendingMachine.entity.VendingMachine;
+import com.nchu.vendingMachine.service.BuyMachineService;
 import com.nchu.vendingMachine.service.LoginService;
+import com.nchu.vendingMachine.service.VendingMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,12 +31,25 @@ import java.util.List;
 @RequestMapping("/back")
 public class BackController {
     @Autowired
+    private VendingMachineService vendingMachineService;
+
+    @Autowired
+    private BuyMachineService buyMachineService;
+
+    @Autowired
     private LoginService loginService;
 
     @RequestMapping("")
     public String index(){
         return "back/login";
     }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("user");
+        return "back/login";
+    }
+
     @PostMapping("/login")
     @ResponseBody
     public RestResponse login(@Valid User user, BindingResult result, HttpSession session){
@@ -51,5 +68,17 @@ public class BackController {
     @RequestMapping("/business")
     public String business(){
         return "back/business/index";
+    }
+    @RequestMapping("/factory")//售货机厂商
+    public String factory(Model model){
+        List<VendingMachine> vendingMachines = vendingMachineService.getAllVendingMachine();
+        model.addAttribute(vendingMachines);
+        return "back/factory/index";
+    }
+    @RequestMapping("/operation")//运维人员
+    public String operation(Model model){
+        List<BuyMachine> buyMachines = buyMachineService.getAllBuyMachine();
+        model.addAttribute(buyMachines);
+        return "back/operation/index";
     }
 }

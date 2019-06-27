@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/head::head(智能售货机后台管理系统)"><title></title></head>
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="back/business/index::businessSidebar"></ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <nav th:replace="back/business/index::businessTopBar"></nav>
+
+        <div class="container-fluid">
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">售货机列表</h1>
+          </div>
+          <div class="container">
+            <div class="row">
+              <div th:each="vm:${vendingMachineList}" class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                  <a class="thumbnail" th:href="'/back/business/getVendingMachine/'+${vm.getId()}">
+                    <img  th:src="${'/image/'+vm.getImgPath()}" class="img-responsive" style="width: 300px;height:300px">
+                    <div>
+                      <h4 th:text="${vm.getName()}"></h4>
+                      <p style="color:red;" th:text="'￥'+${vm.getPrice()}+'元'"></p>
+                    </div>
+                  </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <div th:replace="fragment/footer::footer"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <div th:replace="fragment/logoutModal::logout"></div>
+  <div th:replace="fragment/commonJS::commonJS"></div>
+
+</body>
+</html>

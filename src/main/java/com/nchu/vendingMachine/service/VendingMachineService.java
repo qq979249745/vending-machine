@@ -1,6 +1,7 @@
 package com.nchu.vendingMachine.service;
 
 import com.nchu.vendingMachine.entity.VendingMachine;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,8 +13,11 @@ import java.util.List;
  * @Version 1.0
  */
 public interface VendingMachineService {
+
+
+    boolean addVendingMachine(VendingMachine vendingMachine, MultipartFile file);
     VendingMachine getVendingMachineById(Integer id);
     List<VendingMachine> getAllVendingMachine();
     boolean deleteVendingMachineById(Integer id);
-    boolean updateVendingMachineById(VendingMachine order);
+    boolean updateVendingMachineById(VendingMachine vendingMachine, MultipartFile file);
 }

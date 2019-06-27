@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/head::head(智能售货机后台管理系统)"><title></title></head>
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:fragment="factorySidebar" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/back/factory">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">售货机厂商</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="/back/factory">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>主页</span>
+		</a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- 上架售货机 -->
+	  <li class="nav-item">
+        <a class="nav-link" href="/back/factory/addVendingMachine">
+          <i class="fas fa-fw fa-table"></i>
+          <span>上架售货机</span></a>
+      </li>
+	  
+	   <!-- 售货机安装 -->
+	  <li class="nav-item">
+        <a class="nav-link" href="/back/factory/saleManager">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>售后中心</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <nav th:replace="back/business/index::businessTopBar"></nav>
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">售货机列表</h1>
+          </div>
+          <div class="container">
+            <div class="row">
+              <div th:each="vm:${vendingMachineList}" class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                  <a class="thumbnail" th:href="'/back/factory/editVendingMachine/'+${vm.getId()}">
+                    <img  th:src="${'/image/'+vm.getImgPath()}" class="img-responsive" style="width: 300px;height:300px">
+                    <div>
+                      <h4 th:text="${vm.getName()}"></h4>
+                      <p style="color:red;" th:text="'￥'+${vm.getPrice()}+'元'"></p>
+                    </div>
+                  </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <div th:replace="fragment/footer::footer"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <div th:replace="fragment/logoutModal::logout"></div>
+  <div th:replace="fragment/commonJS::commonJS"></div>
+
+</body>
+</html>

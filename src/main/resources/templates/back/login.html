@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -50,10 +50,11 @@
                     </button>
                     <hr>
                   </form>
-                
                 </div>
               </div>
             </div>
+            <div th:replace="fragment/footer::footer"></div>
+
           </div>
         </div>
 

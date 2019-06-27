@@ -36,11 +36,12 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--生成对应表及类名-->
-<!--        <table tableName="tb_cart" domainObjectName="Cart"/>-->
+
+        <table schema="vending_machine"  tableName="tb_buy_machine" domainObjectName="BuyMachine"/>
         <table schema="vending_machine"  tableName="tb_vending_machine" domainObjectName="VendingMachine"/>
         <table schema="vending_machine" tableName="tb_product" domainObjectName="Product"/>
-        <table schema="vending_machine" tableName="tb_sale" domainObjectName="Sale"/>
+        <table schema="vending_machine" tableName="tb_sale_product" domainObjectName="SaleProduct"/>
         <table schema="vending_machine" tableName="tb_order" domainObjectName="Order"/>
-        <table schema="vending_machine" tableName="tb_user" domainObjectName="User"/>
+<!--        <table schema="vending_machine" tableName="tb_user" domainObjectName="User"/>-->
     </context>
 </generatorConfiguration>

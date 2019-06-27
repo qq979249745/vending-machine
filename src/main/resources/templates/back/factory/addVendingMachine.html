@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/head::head(智能售货机后台管理系统)"><title></title></head>
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <ul th:replace="back/factory/index::factorySidebar"></ul>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <nav th:replace="back/business/index::businessTopBar"></nav>
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">添加售货机</h1>
+          </div>
+        <div class="container">
+            <!-- 开始 -->
+            <form id="myForm"  enctype="multipart/form-data"  method="post">
+              <div class="form-group">
+                <label class="col-sm-2"><span class="text-danger">*</span>售货机名称：</label>
+                <input class="form-control" name="name" required>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2"><span class="text-danger">*</span>售货机描述：</label>
+                <textarea class="form-control" name="description" required></textarea>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5"><span class="text-danger">*</span>售货机价格：</label>
+                <input type="number" class="form-control" name="price" required>
+              </div>
+              <div class="form-group">
+                <div>
+                  <img id="img" style="height: 300px;width: 300px" >
+                </div>
+                <div><span class="text-danger">*</span>选择图片：</div>
+                <div class="custom-file">
+                  <label id="fileName" class="custom-file-label" for="file" ></label>
+                  <input onchange="imgChange()" id="file" name="file" type="file" accept="image/*"  class="custom-file-input"  required>
+                </div>
+              </div>
+              <div class="form-group">
+                <button onclick="save()"  type="button" class="btn btn-primary">保存</button>
+              </div>
+            </form>
+            <!-- 结束 -->
+        </div>
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <div th:replace="fragment/footer::footer"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <div th:replace="fragment/logoutModal::logout"></div>
+  <div th:replace="fragment/commonJS::commonJS"></div>
+  <script>
+    function imgChange(){
+      var file=$('#file')[0].files[0];
+      if (file==null)return;
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload=function (ev) {
+        $('#fileName').text(file.name);
+        $('#img').attr('src',this.result);
+      };
+    }
+    function save(){
+      var data=new FormData($("#myForm")[0]);
+      $.ajax({
+        url:'/back/factory/addVendingMachine',
+        data:data,
+        type:'post',
+        processData: false,
+        contentType: false,
+        success:function (result) {
+          console.log(result);
+          if (200===result.code){
+            toast(result.extend.data,'danger');
+          }else {
+            toast('保存成功','success');
+            setInterval(function () {
+              top.location=result.extend.data;
+            },1000);
+          }
+        }
+      });
+    }
+    function toast(message,type) {
+      bootoast({
+        message: message,
+        type: type,
+        position: 'top-center',
+        icon: type,
+        timeout: 2,
+        animationDuration: 300,
+        dismissible: true
+      });
+    }
+  </script>
+
+</body>
+</html>

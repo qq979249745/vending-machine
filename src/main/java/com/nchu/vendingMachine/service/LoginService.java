@@ -1,7 +1,6 @@
 package com.nchu.vendingMachine.service;
 
 import com.nchu.vendingMachine.entity.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,7 +11,6 @@ import java.util.List;
  * @Date: 2019/6/11 21:19
  * @Version 1.0
  */
-@Service
 public interface LoginService {
     List<User> login(User user);
 }

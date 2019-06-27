@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/head::head(智能售货机后台管理系统)"><title></title></head>
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:fragment="factorySidebar" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/back/factory">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">运维人员</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="/back/factory">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>主页</span>
+		</a>
+      </li>
+
+
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <nav th:replace="back/business/index::businessTopBar"></nav>
+
+        <div class="container-fluid">
+          <h1 class="h3 mb-2 text-gray-800">售货机管理</h1>
+          <p class="mb-4">售货机的位置和状态.</p>
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">售货机</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>安装位置</th>
+                    <th>售货机状态</th>
+                    <th>价格</th>
+                    <th>操作</th>
+                  </tr>
+                  </thead>
+                  <tfoot>
+                  <tr>
+                    <th>#</th>
+                    <th>安装位置</th>
+                    <th>售货机状态</th>
+                    <th>价格</th>
+                    <th>操作</th>
+                  </tr>
+                  </tfoot>
+                  <tbody>
+                  <tr th:each="buyMachine,stat:${buyMachineList}">
+                    <td th:text="${stat.index+1}"></td>
+                    <td th:text="${buyMachine.getLocation()}">学生公寓20栋</td>
+                    <td th:text="${buyMachine.getState()}">经营</td>
+                    <td th:text="${'￥'+buyMachine.getVendingMachine().getPrice()}+'元'">61</td>
+                    <td>
+                       <span th:if="${buyMachine.getState().equals('经营中')||buyMachine.getState().equals('维修中')}">
+                          <button th:onclick="'updateState('+${buyMachine.getId()}+',\'已下线\')'" href="#" class="btn btn-info btn-icon-split">
+                                <span class="icon text-white-50">
+                                <i class="fas fa-info-circle"></i>
+                                </span>
+                            <span class="text">下线</span>
+                          </button>
+                       </span>
+                      <span th:if="${buyMachine.getState().equals('经营中')}">
+                        <button th:onclick="'updateState('+${buyMachine.getId()}+',\'维修中\')'" href="#" class="btn btn-danger btn-icon-split">
+                              <span class="icon text-white-50">
+                              <i class="fas fa-trash"></i>
+                              </span>
+                          <span class="text">申请维修</span>
+                        </button>
+                      </span>
+                      <span th:if="${buyMachine.getState().equals('经营中')}">
+                        <a th:href="" class="btn btn-primary btn-icon-split">
+                              <span class="icon text-white-50">
+                              <i class="fas fa-calendar"></i>
+                              </span>
+                          <span class="text">补货</span>
+                        </a>
+                      </span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div th:replace="fragment/footer::footer"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <div th:replace="fragment/logoutModal::logout"></div>
+  <div th:replace="fragment/commonJS::commonJS"></div>
+  <script type="text/javascript">
+    function updateState(id,state) {
+      $.ajax({
+        type : 'POST',
+        url : '/back/factory/saleManager',
+        data :{
+          id:id,
+          state:state
+        },
+        success : function(result) {
+          if (200===result.code){
+            toast(result.extend.data,'danger');
+          }else {
+            toast('修改成功','success');
+            setInterval(function () {
+              top.location=result.extend.data;
+            },1000);
+          }
+        }
+      })
+    }
+    function toast(message,type) {
+      bootoast({
+        message: message,
+        type: type,
+        position: 'top-center',
+        icon: type,
+        timeout: 2,
+        animationDuration: 300,
+        dismissible: true
+      });
+    }
+  </script>
+</body>
+</html>
