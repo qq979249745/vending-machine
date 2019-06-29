@@ -7,6 +7,9 @@ import javax.crypto.spec.DESKeySpec;
 import java.security.SecureRandom;
 
 /**
+ * 162015班 第13组
+ * 智能售货机后台管理系统——密码加密
+ * @Author: 16201525 夏秋雨
  * @Author: 16201533
  * @Date: 2019/5/29 18:50
  * @Version 1.0
