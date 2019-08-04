@@ -20,10 +20,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         User user = (User) request.getSession().getAttribute("user");
         String requestURI = request.getRequestURI();
         String[] split = requestURI.split("/");
-        if (user!=null&&split.length > 2 && split[2].equals(user.getRole())){
+        if (user!=null&&split.length > 2 && split[2].equals(user.getRole())){//获取用户的角色，只有角色对应才返回true
             return true;
         }
-        response.sendRedirect("/back");
+        response.sendRedirect("/back");//进入登录界面
         return false;
     }
 }
